@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 DEFAULT_EDITOR_URL = 'https://freecellraid.github.io/Freecell-log-studio/'
 CONFIG_PATH = Path('plugin/data/OlivaDiceFreecellBridge/config.json')
 
