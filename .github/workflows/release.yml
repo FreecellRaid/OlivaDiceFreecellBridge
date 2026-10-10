@@ -1,0 +1,106 @@
+name: Release plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Validate release version
+        id: version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          from OlivaDiceFreecellBridge.main import VERSION
+
+          version = json.loads(Path('OlivaDiceFreecellBridge/app.json').read_text(encoding='utf-8'))['version']
+          if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
+              raise SystemExit('app.json version must use X.Y.Z format')
+          if os.environ['RELEASE_TAG'] != 'v' + version:
+              raise SystemExit('Release tag must match app.json version: v' + version)
+          if VERSION != version:
+              raise SystemExit('main.py VERSION must match app.json version')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write('version=' + version + '\n')
+          PY
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Build packages
+        run: python tools/build.py
+
+      - name: Verify package integrity
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from io import BytesIO
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          version = os.environ['RELEASE_VERSION']
+          opk_path = Path('dist/OlivaDiceFreecellBridge.opk')
+          with ZipFile('dist/OlivaDiceFreecellBridge-' + version + '.zip') as bundle:
+              assert bundle.testzip() is None
+              assert set(bundle.namelist()) == {
+                  opk_path.name, 'README.md', 'FORUM_RELEASE.md', 'config.example.json', 'LICENSE'
+              }
+              assert bundle.read(opk_path.name) == opk_path.read_bytes()
+              for name in ['README.md', 'FORUM_RELEASE.md', 'config.example.json', 'LICENSE']:
+                  assert bundle.read(name) == Path(name).read_bytes()
+              with ZipFile(BytesIO(bundle.read(opk_path.name))) as opk:
+                  assert opk.testzip() is None
+                  assert set(opk.namelist()) == {
+                      'OlivaDiceFreecellBridge/app.json', 'OlivaDiceFreecellBridge/main.py',
+                      'OlivaDiceFreecellBridge/__init__.py', 'OlivaDiceFreecellBridge/LICENSE'
+                  }
+                  assert json.loads(opk.read('OlivaDiceFreecellBridge/app.json'))['version'] == version
+          PY
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          assets=("dist/OlivaDiceFreecellBridge.opk" "dist/OlivaDiceFreecellBridge-${RELEASE_VERSION}.zip")
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
+            gh release edit "$RELEASE_TAG" --draft=false
+          else
+            gh release create "$RELEASE_TAG" "${assets[@]}" \
+              --verify-tag --generate-notes \
+              --title "OlivaDiceFreecellBridge ${RELEASE_VERSION}"
+          fi
