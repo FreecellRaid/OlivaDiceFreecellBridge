@@ -1,13 +1,13 @@
 # OlivaDiceFreecellBridge
 
-独立 OlivOS 插件，把 OlivaDiceLogger 返回的日志链接替换为 Freecell Log Studio。
-在 `.log end` 上传完成后，群内返回编辑器链接；点击链接自动下载原日志、解析并进入编辑区。
-`.log upload` 和 `.log temp` 同样使用编辑器链接。
+青果骰插件，把 OlivaDiceLogger 返回的日志链接替换为 [Freecell Log Studio](https://freecellraid.github.io/Freecell-log-studio/)
+在 `.log end` 上传完成后，群内返回替换后的编辑器链接，并可进一步编辑。
+`.log upload` 和 `.log temp` 等同样使用编辑器链接。
 
 ## 安装
 
-依赖 OlivaDiceCore 和 OlivaDiceLogger。将 `OlivaDiceFreecellBridge/` 文件夹复制到
-机器人数据目录的 `plugin/app/`，然后在客户端重载插件。
+依赖 OlivaDiceCore 和 OlivaDiceLogger。
+将 `OlivaDiceFreecellBridge/` 文件夹复制到机器人数据目录的 `plugin/app/`，然后在客户端重载插件即可装载
 也可运行 `python3 tools/build.py`，将生成的 OPK 安装到 `plugin/app/`。
 
 默认编辑器为 `https://freecellraid.github.io/Freecell-log-studio/`。
