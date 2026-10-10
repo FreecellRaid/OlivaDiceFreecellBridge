@@ -1,0 +1,3 @@
+# Only for tools/live_test.py; the plugin itself uses Python's standard library.
+requests>=2.31,<3
+websockets>=12,<16

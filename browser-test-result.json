@@ -1,0 +1,16 @@
+{
+  "editor_link": "https://freecellraid.github.io/Freecell-log-studio/#2-log_a6265ec3-48d3-43e0-92f4-be04f971a618_Freecell%E6%A1%A5%E6%8E%A5%E6%B5%8B%E8%AF%95_fc9a7005",
+  "title": "Freecell Log Studio",
+  "message_count": 5,
+  "responses": [
+    {
+      "url": "https://api.dice.center/dicelogger/logReader.php?id=log_a6265ec3-48d3-43e0-92f4-be04f971a618_Freecell%E6%A1%A5%E6%8E%A5%E6%B5%8B%E8%AF%95_fc9a7005&m=metaData",
+      "status": 200
+    },
+    {
+      "url": "https://api.dice.center/dicelogger/logReader.php?id=log_a6265ec3-48d3-43e0-92f4-be04f971a618_Freecell%E6%A1%A5%E6%8E%A5%E6%B5%8B%E8%AF%95_fc9a7005&m=rawData",
+      "status": 200
+    }
+  ],
+  "page_errors": []
+}

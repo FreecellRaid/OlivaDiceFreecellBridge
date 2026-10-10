@@ -1,0 +1,17 @@
+{
+  "tested_at": "2026-10-10T19:04:25+0800",
+  "client": "http://127.0.0.1:20480",
+  "virtual_group": "906582332",
+  "editor_link": "https://freecellraid.github.io/Freecell-log-studio/#2-log_7404fe64-7c89-42f7-a4e1-7fee014b7834_Freecell%E6%A1%A5%E6%8E%A5%E6%B5%8B%E8%AF%95_0926c8d2",
+  "log_identifier": "log_7404fe64-7c89-42f7-a4e1-7fee014b7834_Freecell桥接测试_0926c8d2",
+  "metadata_code": 0,
+  "checks": [
+    "plugin_loaded",
+    "log_new",
+    "real_dice_reply",
+    "log_end_editor_link",
+    "remote_metadata",
+    "remote_body_contains_message",
+    "log_upload_editor_link"
+  ]
+}
