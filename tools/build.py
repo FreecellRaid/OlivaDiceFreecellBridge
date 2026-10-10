@@ -17,6 +17,6 @@ print(output)
 release = output.parent / ('OlivaDiceFreecellBridge-%s.zip' % version)
 with ZipFile(release, 'w', ZIP_DEFLATED) as archive:
     archive.write(output, output.name)
-    for name in ['README.md', 'FORUM_RELEASE.md', 'config.example.json', 'LICENSE']:
+    for name in ['README.md', 'config.example.json', 'LICENSE']:
         archive.write(root / name, name)
 print(release)

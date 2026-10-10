@@ -74,10 +74,10 @@ jobs:
           with ZipFile('dist/OlivaDiceFreecellBridge-' + version + '.zip') as bundle:
               assert bundle.testzip() is None
               assert set(bundle.namelist()) == {
-                  opk_path.name, 'README.md', 'FORUM_RELEASE.md', 'config.example.json', 'LICENSE'
+                  opk_path.name, 'README.md', 'config.example.json', 'LICENSE'
               }
               assert bundle.read(opk_path.name) == opk_path.read_bytes()
-              for name in ['README.md', 'FORUM_RELEASE.md', 'config.example.json', 'LICENSE']:
+              for name in ['README.md', 'config.example.json', 'LICENSE']:
                   assert bundle.read(name) == Path(name).read_bytes()
               with ZipFile(BytesIO(bundle.read(opk_path.name))) as opk:
                   assert opk.testzip() is None
