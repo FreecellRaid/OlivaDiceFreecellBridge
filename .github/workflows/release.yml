@@ -82,10 +82,9 @@ jobs:
               with ZipFile(BytesIO(bundle.read(opk_path.name))) as opk:
                   assert opk.testzip() is None
                   assert set(opk.namelist()) == {
-                      'OlivaDiceFreecellBridge/app.json', 'OlivaDiceFreecellBridge/main.py',
-                      'OlivaDiceFreecellBridge/__init__.py', 'OlivaDiceFreecellBridge/LICENSE'
+                      'app.json', 'main.py', '__init__.py', 'LICENSE'
                   }
-                  assert json.loads(opk.read('OlivaDiceFreecellBridge/app.json'))['version'] == version
+                  assert json.loads(opk.read('app.json'))['version'] == version
           PY
 
       - name: Publish GitHub Release

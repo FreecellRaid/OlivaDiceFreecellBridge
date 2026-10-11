@@ -9,10 +9,10 @@ output.parent.mkdir(exist_ok=True)
 package = root / 'OlivaDiceFreecellBridge'
 version = json.loads((package / 'app.json').read_text(encoding='utf-8'))['version']
 with ZipFile(output, 'w', ZIP_DEFLATED) as archive:
-    for file in sorted((root / 'OlivaDiceFreecellBridge').glob('*')):
+    for file in sorted(package.glob('*')):
         if file.is_file():
-            archive.write(file, file.relative_to(root))
-    archive.write(root / 'LICENSE', 'OlivaDiceFreecellBridge/LICENSE')
+            archive.write(file, file.relative_to(package))
+    archive.write(root / 'LICENSE', 'LICENSE')
 print(output)
 release = output.parent / ('OlivaDiceFreecellBridge-%s.zip' % version)
 with ZipFile(release, 'w', ZIP_DEFLATED) as archive:
